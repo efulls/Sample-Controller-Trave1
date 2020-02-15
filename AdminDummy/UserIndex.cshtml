@@ -1,0 +1,114 @@
+﻿@using Newtonsoft.Json
+@using TraveUI.ViewModel
+@using Travewell.Model.DTO
+@using Travewell.Model.Domain
+@model Travewell.Model.DTO.GenericPagingResponse
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    ViewBag.Title = "User Index";
+
+    var users = JsonConvert.DeserializeObject<List<DomUsers>>(Model.data);
+}
+
+<ol class="breadcrumb">
+          <li class="breadcrumb-item">Admin</li>
+          <li class="breadcrumb-item">
+            <a href="#">User</a>
+          </li>
+          <li class="breadcrumb-item active">Index</li>
+        </ol>
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                             User List
+                        </div>
+                        <div class="card-body">
+                            
+                            <div class="row">
+                               
+                                <div class="col-md-6">
+                                    <form action="/Common/CityIndex" class="form-inline" id="filterForm" method="get">
+                                        <input id="page" name="page" type="hidden" value="1" />            <div class="form-group d-block w-100">
+                                            <div class="input-group w-100">
+                                                <select class="form-control" id="sb" name="sb">
+                                                    <option value="">Search by</option>
+                                                    <option value="Code">Code</option>
+                                                    <option value="Name">Name</option>
+                                                </select>
+                                                <input type="text" class="form-control w-50" placeholder="value to search" name="sv" value="" />
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-primary btnSubmitSearch">
+                                                        <i data-feather="search" class="feather-18 align-top"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6 text-right">@Html.ActionLink("Create", "UserCreate", "AdminDummy", null, new { @class = "btn btn-sm btn-info" })</div>
+
+                            </div>
+                            <hr />
+                            <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Username</th>
+                                        <th>Branch / Agent</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Group</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in users)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@user.Username</td>
+                                            <td class="text-center">@user.BranchCode</td>
+                                            <td>@user.Fname @user.Lname</td>
+                                            <td>@user.Email</td>
+                                            <td class="text-center">@user.RoleCode</td>
+                                            <td class="text-center"> ? </td>
+                                            <td class="text-center">
+                                                @Html.ActionLink("Change", "UserUpdate", "AdminDummy", new { id = user.Id }, new { @class = "btn btn-sm btn-warning" })
+                                                @Html.ActionLink("Delete", "UserDelete", "AdminDummy", new { id = user.Id }, new { @class = "btn btn-sm btn-danger" })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Prev</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-->
+            </div>
+        </div>
+    </div>

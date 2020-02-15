@@ -1,0 +1,103 @@
+﻿@using TraveUI.ViewModel
+@model Travewell.Model.DTO.FrontEnd.BranchDetailDto
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+
+    var vm = (EditorPageVM<Travewell.Model.DTO.FrontEnd.BranchDetailDto>) ViewBag.VM;
+
+    vm["Code"].Label = "Code";
+    vm["Code"].IsReadOnly = true;
+    vm["BranchParent"].Label = "Parent";
+    vm["BranchParent"].IsReadOnly = true;
+    vm["Alias"].Label = "Currency";
+    vm["Alias"].IsReadOnly = true;
+    vm["NumericCode"].Label = "Virtual Account No";
+    vm["NumericCode"].IsReadOnly = true;
+
+    vm["Name"].Label = "Name";
+    vm["Name"].IsRequired = true;
+
+    vm["Siup"].Label = "Siup";
+
+    vm["AddressLine1"].Label = "Address";
+
+    vm["City"].Label = "City";
+    vm["City"].IsRequired = true;
+
+    vm["IsActive"].Label = "Active ?";
+
+    vm["BranchTypeCode"].Label = "Agent Type";
+    vm["BranchTypeCode"].IsReadOnly = true;
+
+    vm.Bind(Model);
+}
+
+@Html.Partial(ConstantVM.ComponentBreadcrumb, new[] {"Admin", "Agent", vm.Title})
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0">
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "Some Error Occurs", new { @class = "alert alert-dismissable alert-danger" })
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <h3>General Information</h3>
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Code"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Name"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["BranchParent"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["NumericCode"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Alias"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["BranchTypeCode"])
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <h3>&nbsp;</h3>
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Siup"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["AddressLine1"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["AddressLine2"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["AddressLine3"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["City"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["ZipCode"])
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <h3>Contact Information</h3>
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Title"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["FirstName"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["LastName"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Email"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["PhoneMobile"])
+                                    @*<h3>Technical Information</h3>
+                                                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["SecretKey"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["PostBookingNotificationUrl"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["PostIssueNotificationUrl"])*@
+                                    <h3>Status</h3>
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsActive"])
+                                </div>
+                                @*<div class="col-md-12 col-sm-12">
+                                    @Html.Partial(ConstantVM.ComponentSaveCancelButton, vm)
+                                </div>*@
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Agent Settings</div>
+                    <div class="card-body">
+                        @Html.ActionLink("Locations", "BranchLocationIndex", new { id = Model.Code })<br />
+                        @Html.ActionLink("Packages", "BranchPackageUpdate", new { id = Model.Code })<br />
+                        @Html.ActionLink("Airline Markup", "BranchOtherFeeAirlineIndex", new { id = Model.Code })<br />
+                        @Html.ActionLink("Hotel Markup", "BranchOtherFeeHotelIndex", new { id = Model.Code })
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>

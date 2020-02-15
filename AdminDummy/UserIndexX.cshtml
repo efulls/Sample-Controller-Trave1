@@ -1,0 +1,94 @@
+﻿@using Newtonsoft.Json
+@using TraveUI.ViewModel
+@using Travewell.Model.DTO
+@using Travewell.Model.Domain
+@model Travewell.Model.DTO.GenericPagingResponse
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    ViewBag.Title = "User Index";
+
+    var users = JsonConvert.DeserializeObject<List<DomUsers>>(Model.data);
+
+    var request = ((GetUserListRequest)ViewBag.Request);
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: Model.recordcount, canSort: false, ajaxUpdateContainerId: "WebGrid1");
+    grid.Bind(users, autoSortAndPage: false, rowCount: Model.totalrecordcount);
+
+    var hasil = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Model.data, Formatting.Indented));
+}
+
+<pre>@JsonConvert.SerializeObject(Model.data, Formatting.Indented)</pre>
+<pre>@JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Model.data, Formatting.Indented))</pre>
+@foreach (var user in users)
+{
+    @user.Username
+}
+
+
+        <div class="container-fluid">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class=""></div>
+                                <div class="index-table-wrapper overflow-auto">
+                                    @grid.GetHtml(
+                                        htmlAttributes: new { id = "WebGrid1" },
+                                        tableStyle: "table table-striped index-table",
+                                        fillEmptyRows: false,
+                                        mode: WebGridPagerModes.All,
+                                        firstText: "first",
+                                        previousText: " < ",
+                                        nextText: " > ",
+                                        lastText: "last",
+                                        columns: new[]
+                                        {
+                                            grid.Column("Id", "User Id"),
+                                            grid.Column("Username", "Username"),
+                                            grid.Column(format: (item) =>
+                                                Html.Raw($"<a href='{Url.Action("UserUpdate", "AdminDummy", new { id = item.Id})}' class='btn btn-primary btn-sm'>detail</a>")),
+                                            grid.Column(format: (item) =>
+                                                Html.Raw($"<a href='{Url.Action("UserDelete", "AdminDummy", new { id = item.Id})}' class='btn btn-danger btn-sm'>delete</a>"))
+                                        }
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        @section scripts {
+            <script type="text/javascript">
+        $(function() {
+            (function initIndexTable() {
+                const t = "@Model.pagenumber";
+                const o = "@Model.totalrecordcount.ToString()";
+                const ot = Math.floor(o / parseInt("@Model.recordcount")) + 1;
+                const i = $("tfoot tr td").html();
+                const a = "Page "+ t +" of "+ ot +"  | "+ o +" Record(s)";
+
+                $("tfoot tr td").html(
+                    "<div class='row'>" +
+                        "<div class='col-md-3' style='text-align:left'>" +
+                            a +
+                        "</div>" +
+                        "<div class='col-md-6' style='padding-right:20px'>" +
+                            "<center>" + i + "</center>" +
+                        "</div>" +
+                    "</div>"
+                );
+            })();
+
+            $("th a, tfoot a").click(function () {
+                window.location.href = $(this).attr("href");
+            });
+        });
+            </script>
+        }

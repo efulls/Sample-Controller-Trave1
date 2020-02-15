@@ -1,0 +1,32 @@
+﻿@using Newtonsoft.Json
+@using TraveUI.ViewModel
+@using Travewell.Model.Domain
+@model Travewell.Model.DTO.GenericSingleDataResponse
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    ViewBag.Title = "Test";
+
+    var user = JsonConvert.DeserializeObject<DomUsers>(Model.data);
+    var branchs = JsonConvert.SerializeObject(ViewBag.listBranches, Formatting.Indented);
+    var branchs2 = ViewBag.listBranches;
+}
+
+<pre>@*@JsonConvert.SerializeObject(user, Formatting.Indented)*@</pre>
+
+<pre>@*@JsonConvert.SerializeObject(ViewBag.listBranches, Formatting.Indented)*@</pre>
+
+
+
+@using (Html.BeginForm("UserUpdate", "AdminDummy", FormMethod.Post))
+{
+    
+<div class="form-group">
+    <select>
+        @foreach (var b in branchs2)
+        {
+            <option>@b.Code</option>
+        }
+    </select>
+</div>
+    }

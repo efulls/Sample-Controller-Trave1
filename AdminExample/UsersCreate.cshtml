@@ -1,0 +1,66 @@
+﻿@using TraveUI.ViewModel
+@model Travewell.Model.Domain.DomUsers
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    var vm = (EditorPageVM<Travewell.Model.Domain.DomUsers>) ViewBag.VM;
+    vm["Id"].IsVisible = false;
+    vm["BranchCode"].IsReadOnly = true;
+    vm["PasswordExpiredDate"].IsReadOnly = true;
+    vm["IsB2C"].IsReadOnly = true;
+    vm.Bind(Model);
+}
+
+@Html.Partial(ConstantVM.ComponentBreadcrumb, new[] {"Admin", "Agent", vm.Title})
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>@vm.Title</strong>
+                        <small>Form</small>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "Some Error Occurs", new { @class = "alert alert-dismissable alert-danger" })
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    @Html.Partial(ConstantVM.ComponentTextBoxNumber, vm["Id"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["BranchCode"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Username"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Fname"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["LName"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Email"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["HandPhone"])
+                                    @Html.Partial(ConstantVM.ComponentDatepicker, vm["PasswordExpiredDate"])
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["RoleCode"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["BranchUserGroupId"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["CurrentBranchLocationId"])
+                                    @Html.Partial(ConstantVM.ComponentTextBox, vm["Status"])
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsExternal"])
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsBranchAdmin"])
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsLocationAware"])
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsUsePlafond"])
+                                    @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsB2C"])
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            @Html.Partial(ConstantVM.ComponentSaveCancelButton, vm)
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- /.col-->
+        </div>
+
+    </div>
+</div>

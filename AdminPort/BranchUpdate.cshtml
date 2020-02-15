@@ -1,0 +1,110 @@
+﻿@using TraveUI.Extension
+@using TraveUI.Libs
+@using TraveUI.ViewModel
+@model TraveUI.ViewModel.EditorPageVM<TraveUI.Models.CRUD.BranchesUI>
+
+@functions
+{
+    public List<SelectListItem> TitleSelectListItems => 
+        PersonTitle.OptionValues.ToSelectListItems(Model["Title"].Value as string);
+
+}
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    ViewBag.Title = Model.Title;
+
+    Model["Code"].Label = "Branch Code";
+    Model["NumericCode"].Label = "Virtual Account No";
+    Model["Alias"].Label = "Currency";
+    Model["BranchParent"].Label = "Parent";
+    Model["BranchTypeCode"].Label = "Agent Type";
+
+    Model["PhoneMobile"].Label = "Mobile Phone";
+
+    var virtualAccountOptions = new Dictionary<string, string>()
+    {
+        {"REQUEST_HQ", "Request HQ"}
+    }.ToSelectListItems((string) Model["NumericCode"]?.Value ?? "REQUEST_HQ" );
+
+    Html.RenderPartial(ConstantVM.ComponentBreadcrumb, new[] {"Admin", "Branch", (Model.IsCreate ? "Create" : "Update")});
+}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        Html.RenderPartial(ConstantVM.ComponentValidationSummary, ViewData.ModelState);
+
+                        <div class="card-header">General Information</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.Partial(ConstantVM.ComponentTextBox, Model["Code"])
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.Partial(ConstantVM.ComponentTextBox, Model["Name"])
+                                </div>
+                            </div>
+                            
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["BranchParent"])
+                            
+                            @Html.Partial(ConstantVM.ComponentSelectList, Model["NumericCode"],
+                                new ViewDataDictionary()
+                                {
+                                    {ConstantVM.DataKeySelectList, virtualAccountOptions}
+                                })
+
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["Alias"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["BranchTypeCode"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["Npwp"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["Siup"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["AddressLine1"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["AddressLine2"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["AddressLine3"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["City"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["ZipCode"])
+                        </div>
+
+                        <div class="card-header border-top">Contact Information</div>
+                        <div class="card-body">
+                            @Html.Partial(ConstantVM.ComponentSelectList, Model["Title"], 
+                                new ViewDataDictionary
+                                {{
+                                    ConstantVM.DataKeySelectList, TitleSelectListItems
+                                }})
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["FirstName"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["LastName"]) 
+                            @Html.Partial(ConstantVM.ComponentTextBoxEmail, Model["Email"])
+                            @Html.Partial(ConstantVM.ComponentTextBox, Model["PhoneMobile"])
+                        </div>
+
+                        <div class="card-body">
+                            @Html.Partial(ConstantVM.ComponentCheckBox, Model["IsActive"])
+                            @Html.Partial(ConstantVM.ComponentSaveCancelButton, Model)
+                        </div>
+                    }
+                </div>
+            </div>
+            @if (Model.IsCreate == false)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Agent Settings</div>
+                        <div class="card-body">
+                            @Html.ActionLink("Packages", "BranchPackageUpdate", new { id = Model["Code"].Value })<br />
+                            @Html.ActionLink("Users", "UsersIndex", new { id = Model["Code"].Value })<br />
+                            @Html.ActionLink("Locations", "BranchLocationIndex", new { id = Model["Code"].Value })<br />
+                            @Html.ActionLink("Airline Markup", "BranchOtherFeeAirlineIndex", new { id = Model["Code"].Value })<br />
+                            @Html.ActionLink("Hotel Markup", "BranchOtherFeeHotelIndex", new { id = Model["Code"].Value })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

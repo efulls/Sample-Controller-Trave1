@@ -1,0 +1,113 @@
+﻿@using TraveUI.ViewModel
+@model Travewell.Model.DTO.FrontEnd.BranchDetailDto
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    var vm = (EditorPageVM<Travewell.Model.DTO.FrontEnd.BranchDetailDto>) ViewBag.VM;
+
+    vm["Code"].IsReadOnly = true;
+    vm["Code"].IsVisible = false;
+    vm["Code"].Label = "";
+
+    vm["Name"].IsReadOnly = true;
+
+    vm["MaxUserCount"].Label = "Maximum User Count";
+    vm["PaymentStatementTypeCode"].Label = "Payment Statement Type";
+    vm["NtaCalculationTypeCode"].Label = "NTA Calculation Type";
+
+    vm["IsDevelopment"].Label = "Development ? ";
+
+    vm["IsDomestic"].Label = "Domestic Flight? ";
+    vm["IsInternational"].Label = "International Flight?";
+
+    vm.Bind(Model);
+}
+
+@Html.Partial(ConstantVM.ComponentBreadcrumb, new[] {"Admin", "Agent", vm.Title + " ( " + vm["Code"].Value + " : " + vm["Name"].Value + " )" })
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0">
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "Some Error Occurs", new { @class = "alert alert-dismissable alert-danger" })
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <h3>Agent Package Information</h3>
+                                <h4>Users</h4>
+                                @Html.Partial(ConstantVM.ComponentTextBoxNumber, vm["MaxUserCount"])
+                                <h4>Charges</h4>
+                                @Html.Partial(ConstantVM.ComponentTextBox, vm["PaymentStatementTypeCode"])
+                                @Html.Partial(ConstantVM.ComponentTextBox, vm["NtaCalculationTypeCode"])
+
+                                @*@Html.Partial(ConstantVM.ComponentCheckBox, vm["IsKeretaBandara"])
+        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsEvent"])
+        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsBus"])*@
+                                <br />
+                                <h4>Development Stage</h4>
+                                @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsDevelopment"])
+                                @Html.Partial(ConstantVM.ComponentTextBox, vm["Code"])
+                                <div class="card">
+                                    <div class="card-header">Useful Links</div>
+                                    <div class="card-body">
+                                        @Html.ActionLink("Formula", "BranchPackageServiceChargeUpdate", new { id = Model.Code })<br />
+                                        <p><small>Setting service charge formula</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">Flight &amp; Train</div>
+                                    <div class="card-body">
+                                        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsDomestic"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["ServiceChargeTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["ServiceChargeAmount"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["MaxMarkupAmount"])
+                                        <br />
+                                        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsInternational"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["FlightIntServiceChargeTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["FlightIntServiceChargeAmount"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["FlightIntMaxMarkupAmount"])
+                                        <br />
+                                        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsKeretaApi"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["TrainServiceChargeTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["TrainServiceChargeAmount"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["TrainMaxMarkupAmount"])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">Hotel</div>
+                                    <div class="card-body">
+                                        @Html.Partial(ConstantVM.ComponentCheckBox, vm["IsHotel"])
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["HotelServiceChargeTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["HotelServiceChargeAmount"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["HotelMaxMarkupAmount"])
+
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["HotelDiscountTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["HotelDiscountAmount"])
+
+                                        @Html.Partial(ConstantVM.ComponentTextBox, vm["HotelIntServiceChargeTypeCode"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["HotelIntServiceChargeAmount"])
+                                        @Html.Partial(ConstantVM.ComponentTextBoxMoney, vm["HotelIntMaxMarkupAmount"])
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12 col-sm-12">
+                                @Html.Partial(ConstantVM.ComponentSaveCancelButton, vm)
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

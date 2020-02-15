@@ -1,0 +1,38 @@
+﻿@using TraveUI.ViewModel
+@model TraveUI.ViewModel.IndexPageVM<TraveUI.Models.CRUD.BranchesUI>
+
+@{
+    Layout = ConstantVM.LayoutDefault;
+    ViewBag.Title = Model.Title;
+
+    Model["Code"].IsVisible = true; 
+    Model["Name"].IsVisible = true;
+    Model["BranchParent"].IsVisible = true;
+    Model["BranchTypeCode"].IsVisible = true;
+    Model.PaginationKey = item => item.Code;
+
+    var indexTableSearchType = new Dictionary<string, string>() {{"", "Search By"}, {"Code", "Code"}, {"Name", "Name"}};
+
+    Model.SetSelectListItem(ConstantVM.DataKeySearchIndexTable, indexTableSearchType, Model.PagingModel.SearchType);
+    
+    Html.RenderPartial(ConstantVM.ComponentBreadcrumb, new[] {"Admin", "Branches"});
+}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        @{
+                            Html.RenderPartial(ConstantVM.ComponentIndexTableFilter, Model, new ViewDataDictionary {{ ConstantVM.DataKeyPagination, Model.PagingModel }});
+                            <br/>
+                            Html.RenderPartial(ConstantVM.ComponentIndexTable, Model);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
